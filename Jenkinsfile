@@ -30,5 +30,13 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            // Clean up the Docker image and container after the build
+            cleanWs()
+            docker.image('todo-dev').clean()
+            sh 'docker container rm my-container -f'
+        }
+    }
 
 }
