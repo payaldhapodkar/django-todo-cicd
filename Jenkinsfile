@@ -25,7 +25,7 @@ pipeline {
         //         }
         //     }
         // }
-
+ 
         // stage('Stop Existing Container') {
         //     steps {
         //         script {
@@ -39,7 +39,7 @@ pipeline {
         //         }
         //     }
         // }
-             
+    
         stage('Run Docker Container') {
             steps {
                 script {
