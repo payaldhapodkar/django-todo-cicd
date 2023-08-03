@@ -1,14 +1,5 @@
 pipeline {
     agent any
-
-    stages {
-        // stage('Clone Repository') {
-        //     steps {
-        //         // Clone the GitHub repository
-        //         git 'https://github.com/payaldhapodkar/django-todo-cicd.git'
-        //     }
-        // }
-
         stage('Build Docker Image') {
             steps {
                 script {
