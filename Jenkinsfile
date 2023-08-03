@@ -2,16 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Stop Container') {
-            steps {
-                script {
-                    // Stop the container if it exists
-                    def containerName = 'my-container'
-                    sh "docker stop ${containerName} || true"
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
