@@ -1,26 +1,41 @@
 pipeline {
     agent any
-    
+
     stages {
-        stage('Build Docker Image') {
+        stage('Stop Container') {
             steps {
                 script {
-                    // Replace 'your-docker-image' with the name of your Docker image
-                    dockerImage = docker.build('todo-dev')
+                    // Stop the container if it exists
+                    def containerName = 'my-container'
+                    sh "docker stop ${containerName} || true"
                 }
             }
         }
-        
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image
+                    sh 'docker build -t todo-dev .'
+                }
+            }
+        }
+
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Remove the container if it's already running
-                    docker.image('todo-dev').withRun('-p 8081:8081 --name my-container') {
-                        // The above line will run the container and map port 8081 inside the container to port 8081 on the host machine
-                        // Add any other configuration or environment variables if required for your application
-                    }
+                    // Run the Docker container
+                    sh 'docker run -d -p 8081:8081 --name my-container todo-dev'
                 }
             }
-        }         
+        }
+    }
+
+    post {
+        always {
+            // Clean up the Docker container after the build
+            sh 'docker stop my-container || true'
+            sh 'docker rm my-container || true'
+        }
     }
 }
