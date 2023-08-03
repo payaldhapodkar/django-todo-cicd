@@ -39,7 +39,7 @@ pipeline {
         //         }
         //     }
         // }
-            
+             
         stage('Run Docker Container') {
             steps {
                 script {
@@ -48,7 +48,7 @@ pipeline {
                         // The above line will run the container and map port 8081 inside the container to port 8081 on the host machine
                         // Add any other configuration or environment variables if required for your application
                     }
-                }
+                } 
             }
         }         
     }
