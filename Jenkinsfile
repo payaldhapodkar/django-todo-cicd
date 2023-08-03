@@ -1,5 +1,11 @@
 pipeline {
     agent any
+        // stage('Clone Repository') {
+        //     steps {
+        //         // Clone the GitHub repository
+        //         git 'https://github.com/your-username/your-repo.git'
+        //     }
+        // }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -21,5 +27,5 @@ pipeline {
             }
         }
     }
-
+}
 
