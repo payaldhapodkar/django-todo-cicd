@@ -1,35 +1,34 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_IMAGE = "todo-dev:latest"
-        // Replace "my-local-image" with the name you want for your local Docker image
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+        // stage('Clone Repository') {
+        //     steps {
+        //         // Clone the GitHub repository
+        //         git 'https://github.com/payaldhapodkar/django-todo-cicd.git'
+        //     }
+        // }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build("${DOCKER_IMAGE}", ".")
+                    // Replace 'your-docker-image' with the name of your Docker image
+                    dockerImage = docker.build('todo-dev')
                 }
             }
         }
 
-        stage('Tag Docker Image') {
+        stage('Run Docker Container') {
             steps {
                 script {
-                    docker.image("${DOCKER_IMAGE}").withRegistry('') {
-                        // Empty registry URL to tag locally
-                        docker.image("${DOCKER_IMAGE}").push("latest")
+                    // Remove the container if it's already running
+                    docker.image('todo-dev').withRun('-p 8081:8081 --name my-container') {
+                        // The above line will run the container and map port 8081 inside the container to port 8081 on the host machine
+                        // Add any other configuration or environment variables if required for your application
                     }
                 }
             }
         }
     }
+
 }
