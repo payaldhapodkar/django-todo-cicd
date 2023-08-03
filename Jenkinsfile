@@ -10,7 +10,35 @@ pipeline {
                 }
             }
         }
-        
+        stage('Check if Container is Running') {
+            steps {
+                script {
+                    try {
+                        // Check if the container is running
+                        docker.image('todo-dev').inside('-p 8081:8081 --name my-container') {
+                            // Do nothing, just check the container status
+                        }
+                    } catch (Exception e) {
+                        // If the container is not running, it will throw an exception
+                        // Handle the exception here, or do nothing if you want to proceed anyway
+                    }
+                }
+            }
+        }
+
+        stage('Stop Existing Container') {
+            steps {
+                script {
+                    // Stop the container if it's already running
+                    try {
+                        sh 'docker stop my-container'
+                    } catch (Exception e) {
+                        // If the container is not running, it will throw an exception
+                        // Handle the exception here, or do nothing if you want to proceed anyway
+                    }
+                }
+            }
+        }
         stage('Run Docker Container') {
             steps {
                 script {
