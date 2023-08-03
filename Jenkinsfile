@@ -30,12 +30,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            // Clean up the Docker container after the build
-            sh 'docker stop my-container || true'
-            sh 'docker rm my-container || true'
-        }
-    }
 }
