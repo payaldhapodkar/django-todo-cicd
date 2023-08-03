@@ -3,7 +3,7 @@ pipeline {
         // stage('Clone Repository') {
         //     steps {
         //         // Clone the GitHub repository
-        //         git 'https://github.com/payaldhapodkar/django-todo-cicd.git'
+        //         git 'https://github.com/your-username/your-repo.git'
         //     }
         // }
         stage('Build Docker Image') {
@@ -27,4 +27,4 @@ pipeline {
             }
         }
     }
-
+}
