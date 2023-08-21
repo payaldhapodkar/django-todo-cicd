@@ -39,21 +39,34 @@ pipeline {
         //         }
         //     }
         // }
+        // stage('Conditional Stage') {
+        //     when {
+        //         expression {
+        //             // Check if the PR contains a specific commit message
+        //             return checkout(scm).pollingBaseline == null &&
+        //                    checkout(scm).commits.any { commit -> commit.message.contains('specific-commit-message') }
+        //         }
+        //     }
+        //     steps {
+        //         script {
+        //             // Steps to run when the condition is met
+        //             echo "Running conditional steps"
+        //         }
+        //     }
+        // }
         stage('Conditional Stage') {
-            when {
-                expression {
-                    // Check if the PR contains a specific commit message
-                    return checkout(scm).pollingBaseline == null &&
-                           checkout(scm).commits.any { commit -> commit.message.contains('specific-commit-message') }
-                }
-            }
             steps {
                 script {
-                    // Steps to run when the condition is met
-                    echo "Running conditional steps"
+                    def commitMessages = checkout(scm).commits.collect { it.message }
+                    echo "Commit messages: ${commitMessages.join('\n')}"
+                    
+                    def shouldRun = checkout(scm).pollingBaseline == null &&
+                                   checkout(scm).commits.any { commit -> commit.message.contains('specific-commit-message') }
+                    echo "Should run: ${shouldRun}"
                 }
             }
-        }
+}
+
     
     //     stage('Run Docker Container') {
     //         steps {
