@@ -47,6 +47,12 @@ pipeline {
                            checkout(scm).commits.any { it.message.contains('specific-commit-message') }
                 }
             }
+            steps {
+				script{
+                // Steps to run when the condition is met
+				}
+            }
+		}
     
         stage('Run Docker Container') {
             steps {
@@ -60,5 +66,4 @@ pipeline {
             }
         }         
     }
-}
 }
