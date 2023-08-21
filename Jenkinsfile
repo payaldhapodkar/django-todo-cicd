@@ -70,17 +70,22 @@ pipeline {
             steps {
                 script {
                     def savedCommitMessage = "Your expected commit message"
+                    def commits = checkout(scm).commits
 
-                    def latestCommitMessage = sh(script: 'git log -1 --pretty=format:"%s"', returnStdout: true).trim()
+                    if (commits && commits.size() > 0) {
+                        def latestCommitMessage = commits[0].message
 
-                    echo "Saved Commit Message: ${savedCommitMessage}"
-                    echo "Latest Commit Message: ${latestCommitMessage}"
+                        echo "Saved Commit Message: ${savedCommitMessage}"
+                        echo "Latest Commit Message: ${latestCommitMessage}"
 
-                    if (savedCommitMessage == latestCommitMessage) {
-                        echo "Running conditional steps"
-                        // Add your steps to run when the condition is met
+                        if (savedCommitMessage == latestCommitMessage) {
+                            echo "Running conditional steps"
+                            // Add your steps to run when the condition is met
+                        } else {
+                            echo "Skipping conditional steps"
+                        }
                     } else {
-                        echo "Skipping conditional steps"
+                        echo "No commits found"
                     }
                 }
             }
