@@ -39,6 +39,14 @@ pipeline {
         //         }
         //     }
         // }
+        stage('Conditional Stage') {
+            when {
+                expression {
+                    // Check if the PR contains a specific commit message
+                    return checkout(scm).pollingBaseline == null &&
+                           checkout(scm).commits.any { it.message.contains('specific-commit-message') }
+                }
+            }
     
         stage('Run Docker Container') {
             steps {
