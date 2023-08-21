@@ -54,18 +54,36 @@ pipeline {
         //         }
         //     }
         // }
+//         stage('Conditional Stage') {
+//             steps {
+//                 script {
+//                     def commitMessages = checkout(scm).commits.collect { it.message }
+//                     echo "Commit messages: ${commitMessages.join('\n')}"
+                    
+//                     def shouldRun = checkout(scm).pollingBaseline == null &&
+//                                    checkout(scm).commits.any { commit -> commit.message.contains('changes in file') }
+//                     echo "Should run: ${shouldRun}"
+//                 }
+//             }
+// }
         stage('Conditional Stage') {
             steps {
                 script {
-                    def commitMessages = checkout(scm).commits.collect { it.message }
-                    echo "Commit messages: ${commitMessages.join('\n')}"
-                    
-                    def shouldRun = checkout(scm).pollingBaseline == null &&
-                                   checkout(scm).commits.any { commit -> commit.message.contains('changes in file') }
-                    echo "Should run: ${shouldRun}"
+                    def savedCommitMessage = "updated code"
+                    def currentCommitMessage = checkout(scm).commits[0].message
+
+                    echo "Saved Commit Message: ${savedCommitMessage}"
+                    echo "Current Commit Message: ${currentCommitMessage}"
+
+                    if (savedCommitMessage == currentCommitMessage) {
+                        echo "Running conditional steps"
+                        // Add your steps to run when the condition is met
+                    } else {
+                        echo "Skipping conditional steps"
+                    }
                 }
             }
-}
+        }
 
     
     //     stage('Run Docker Container') {
