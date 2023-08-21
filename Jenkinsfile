@@ -44,15 +44,15 @@ pipeline {
                 expression {
                     // Check if the PR contains a specific commit message
                     return checkout(scm).pollingBaseline == null &&
-                           checkout(scm).commits.any { it.message.contains('specific-commit-message') }
+                           checkout(scm).commits.any { commit -> commit.message.contains('specific-commit-message') }
                 }
             }
             steps {
-		script{
-                // Steps to run when the condition is met
-	        }
-	    }
-	}
+                script {
+                    // Steps to run when the condition is met
+                    echo "Running conditional steps"
+                }
+            }
     
         stage('Run Docker Container') {
             steps {
