@@ -84,9 +84,7 @@ pipeline {
                         } else {
                             echo "Skipping conditional steps"
                         }
-                    } else {
-                        echo "No commits found"
-                    }
+                    } 
                 }
             }
         }
