@@ -69,7 +69,7 @@ pipeline {
         stage('Conditional Stage') {
             steps {
                 script {
-                    def savedCommitMessage = "updated file"
+                    def savedCommitMessage = "updated code"
                     def commits = checkout(scm).commits
         
                     if (commits && commits.size() > 0) {
