@@ -81,9 +81,7 @@ pipeline {
                         if (savedCommitMessage == latestCommitMessage) {
                             echo "Running conditional steps"
                             // Add your steps to run when the condition is met
-                        } else {
-                            echo "Skipping conditional steps"
-                        }
+                        } 
                     } 
                 }
             }
