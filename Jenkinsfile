@@ -61,7 +61,7 @@ pipeline {
                     echo "Commit messages: ${commitMessages.join('\n')}"
                     
                     def shouldRun = checkout(scm).pollingBaseline == null &&
-                                   checkout(scm).commits.any { commit -> commit.message.contains('specific-commit-message') }
+                                   checkout(scm).commits.any { commit -> commit.message.contains('changes in file') }
                     echo "Should run: ${shouldRun}"
                 }
             }
