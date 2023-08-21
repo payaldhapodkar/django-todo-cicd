@@ -48,11 +48,11 @@ pipeline {
                 }
             }
             steps {
-				script{
+		script{
                 // Steps to run when the condition is met
-				}
-            }
-		}
+	        }
+	    }
+	}
     
         stage('Run Docker Container') {
             steps {
