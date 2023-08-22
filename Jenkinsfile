@@ -66,26 +66,39 @@ pipeline {
 //                 }
 //             }
 // }
-        stage('Conditional Stage') {
-            steps {
-                script {
-                    def savedCommitMessage = "Your expected commit message"
-                    def commits = checkout(scm).commits
+       stage('Conditional Stage') {
+    steps {
+        script {
+            def savedCommitMessage = "Your expected commit message"
+            def commits = checkout(scm).commits
 
-                    if (commits && commits.size() > 0) {
-                        def latestCommitMessage = commits[0].message
+            if (commits && commits.size() > 0) {
+                def currentCommitMessage = commits[0].message
 
-                        echo "Saved Commit Message: ${savedCommitMessage}"
-                        echo "Latest Commit Message: ${latestCommitMessage}"
+                echo "Saved Commit Message: ${savedCommitMessage}"
+                echo "Current Commit Message: ${currentCommitMessage}"
 
-                        if (savedCommitMessage == latestCommitMessage) {
-                            echo "Running conditional steps"
-                            // Add your steps to run when the condition is met
-                        } 
-                    } 
+                if (savedCommitMessage == currentCommitMessage) {
+                    echo "Running conditional steps"
+                    // Add your steps to run when the condition is met
+                } else {
+                    echo "Skipping conditional steps"
                 }
+            } else {
+                echo "No commits found"
+            }
+
+            // Debug information
+            echo "Number of commits: ${commits.size()}"
+            for (commit in commits) {
+                echo "Commit SHA: ${commit.id}"
+                echo "Commit Message: ${commit.message}"
             }
         }
+    }
+}
+
+        
 
     
     //     stage('Run Docker Container') {
