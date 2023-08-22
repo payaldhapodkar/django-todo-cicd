@@ -39,53 +39,30 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Conditional Stage') {
-        //     when {
-        //         expression {
-        //             // Check if the PR contains a specific commit message
-        //             return checkout(scm).pollingBaseline == null &&
-        //                    checkout(scm).commits.any { commit -> commit.message.contains('specific-commit-message') }
-        //         }
-        //     }
-        //     steps {
-        //         script {
-        //             // Steps to run when the condition is met
-        //             echo "Running conditional steps"
-        //         }
-        //     }
-        // }
-//         stage('Conditional Stage') {
-//             steps {
-//                 script {
-//                     def commitMessages = checkout(scm).commits.collect { it.message }
-//                     echo "Commit messages: ${commitMessages.join('\n')}"
-                    
-//                     def shouldRun = checkout(scm).pollingBaseline == null &&
-//                                    checkout(scm).commits.any { commit -> commit.message.contains('changes in file') }
-//                     echo "Should run: ${shouldRun}"
-//                 }
-//             }
-// }
-      stage('Conditional Stage') {
+        stage('Conditional Stage') {
             steps {
                 script {
                     def savedCommitMessage = "Your expected commit message"
-
-                    def latestCommitMessage = sh(script: 'git log -1 --pretty=format:"%s"', returnStdout: true).trim()
-
-                    echo "Saved Commit Message: ${savedCommitMessage}"
-                    echo "Latest Commit Message: ${latestCommitMessage}"
-
-                    if (savedCommitMessage == latestCommitMessage) {
-                        echo "Running conditional steps"
-                        // Add your steps to run when the condition is met
+                    def commits = checkout(scm).commits
+        
+                    if (commits && commits.size() > 0) {
+                        def currentCommitMessage = commits[0].message
+        
+                        echo "Saved Commit Message: ${savedCommitMessage}"
+                        echo "Current Commit Message: ${currentCommitMessage}"
+        
+                        if (savedCommitMessage == currentCommitMessage) {
+                            echo "Running conditional steps"
+                            // Add your steps to run when the condition is met
+                        } else {
+                            echo "Skipping conditional steps"
+                        }
                     } else {
-                        echo "Skipping conditional steps"
+                        echo "No commits found"
                     }
                 }
             }
         }
-    
 
         
 
