@@ -43,30 +43,27 @@ pipeline {
             steps {
                 script {
                     def savedCommitMessage = "Your expected commit message"
-                    def commits = checkout(scm).commits
-        
-                    if (commits && commits.size() > 0) {
-                        def currentCommitMessage = commits[0].message
-        
-                        echo "Saved Commit Message: ${savedCommitMessage}"
-                        echo "Current Commit Message: ${currentCommitMessage}"
-        
-                        if (savedCommitMessage == currentCommitMessage) {
-                            echo "Running conditional steps"
-                            // Add your steps to run when the condition is met
-                        } else {
-                            echo "Skipping conditional steps"
-                        }
+
+                    def currentCommitMessage = sh(
+                        script: 'git log -1 --pretty=%B',
+                        returnStdout: true
+                    ).trim()
+
+                    echo "Saved Commit Message: ${savedCommitMessage}"
+                    echo "Current Commit Message: ${currentCommitMessage}"
+
+                    if (savedCommitMessage == currentCommitMessage) {
+                        echo "Running conditional steps"
+                        // Add your steps to run when the condition is met
                     } else {
-                        echo "No commits found"
+                        echo "Skipping conditional steps"
                     }
                 }
             }
         }
+    }
+}
 
-        
-
-    
     //     stage('Run Docker Container') {
     //         steps {
     //             script {
