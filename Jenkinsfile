@@ -66,37 +66,26 @@ pipeline {
 //                 }
 //             }
 // }
-       stage('Conditional Stage') {
-    steps {
-        script {
-            def savedCommitMessage = "Your expected commit message"
-            def commits = checkout(scm).commits
+      stage('Conditional Stage') {
+            steps {
+                script {
+                    def savedCommitMessage = "Your expected commit message"
 
-            if (commits && commits.size() > 0) {
-                def currentCommitMessage = commits[0].message
+                    def latestCommitMessage = sh(script: 'git log -1 --pretty=format:"%s"', returnStdout: true).trim()
 
-                echo "Saved Commit Message: ${savedCommitMessage}"
-                echo "Current Commit Message: ${currentCommitMessage}"
+                    echo "Saved Commit Message: ${savedCommitMessage}"
+                    echo "Latest Commit Message: ${latestCommitMessage}"
 
-                if (savedCommitMessage == currentCommitMessage) {
-                    echo "Running conditional steps"
-                    // Add your steps to run when the condition is met
-                } else {
-                    echo "Skipping conditional steps"
+                    if (savedCommitMessage == latestCommitMessage) {
+                        echo "Running conditional steps"
+                        // Add your steps to run when the condition is met
+                    } else {
+                        echo "Skipping conditional steps"
+                    }
                 }
-            } else {
-                echo "No commits found"
-            }
-
-            // Debug information
-            echo "Number of commits: ${commits.size()}"
-            for (commit in commits) {
-                echo "Commit SHA: ${commit.id}"
-                echo "Commit Message: ${commit.message}"
             }
         }
-    }
-}
+    
 
         
 
